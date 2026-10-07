@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shake Hands | Chill X Family</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-color: #ffffff;
+            --accent-glow: rgba(255, 65, 108, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        /* --- SCREEN 1: HANDSHAKE INTERACTION --- */
+        #interactive-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .screen-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #ffffff, #ffd194);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulseText 1.5s infinite alternate;
+        }
+
+        .hands-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 120px;
+            font-size: 5rem;
+            user-select: none;
+            margin-bottom: 30px;
+        }
+
+        .left-hand, .right-hand {
+            display: inline-block;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hands-wrapper.shake .left-hand {
+            transform: translateX(60px) rotate(15deg);
+        }
+
+        .hands-wrapper.shake .right-hand {
+            transform: translateX(-60px) rotate(-15deg);
+        }
+
+        .click-hint {
+            font-size: 0.95rem;
+            color: #b0c4de;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- SCREEN 2: MESSAGE CONTAINER --- */
+        .message-container {
+            max-width: 650px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 45px 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: none;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .message-container.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .joined-hand {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: bounce 1.5s infinite alternate;
+        }
+
+        .group-tag {
+            display: inline-block;
+            background: var(--primary-gradient);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            background: linear-gradient(to right, #ffffff, #ffd194);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .highlight-quote {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #ffffff;
+            border-left: 4px solid #ff416c;
+            border-right: 4px solid #ff4b2b;
+            padding: 14px 18px;
+            margin: 25px 0;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+        }
+
+        .cheers {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffba08;
+            margin-top: 20px;
+        }
+
+        @keyframes pulseText {
+            from { opacity: 0.7; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1.02); }
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        @media (max-width: 480px) {
+            .hands-wrapper { gap: 60px; font-size: 3.8rem; }
+            .screen-title { font-size: 1.5rem; }
+            .message-container { padding: 35px 20px; }
+            h1 { font-size: 1.7rem; }
+            p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="interactive-screen" onclick="triggerHandshake()">
+        <h2 class="screen-title">Shake Hands</h2>
+        <div class="hands-wrapper" id="handsWrapper">
+            <span class="left-hand">🫱</span>
+            <span class="right-hand">🫲</span>
+        </div>
+        <div class="click-hint">✨ Click anywhere to connect</div>
+    </div>
+
+    <div class="message-container" id="messageContainer">
+        <div class="joined-hand">🤝</div>
+        <br>
+        <span class="group-tag">Chill X Family</span>
+
+        <h1>To My Chill X Family ❤️</h1>
+        <p>Wishing us all a bright and successful future! ✨</p>
+
+        <div class="highlight-quote">
+            No matter how far we go or how much life changes, we’ll always be friends forever. 🫶🔥
+        </div>
+
+        <p class="cheers">More memories, more laughs, more adventures! 🥂</p>
+    </div>
+
+    <script>
+        function triggerHandshake() {
+            const handsWrapper = document.getElementById('handsWrapper');
+            const interactiveScreen = document.getElementById('interactive-screen');
+            const messageContainer = document.getElementById('messageContainer');
+
+            handsWrapper.classList.add('shake');
+
+            setTimeout(() => {
+                interactiveScreen.style.opacity = '0';
+                interactiveScreen.style.transform = 'scale(0.9)';
+                
+                setTimeout(() => {
+                    interactiveScreen.style.display = 'none';
+                    messageContainer.classList.add('show');
+                }, 600);
+            }, 600);
+        }
+    </script>
+
+</body>
+</html>
